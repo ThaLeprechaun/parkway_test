@@ -1,12 +1,19 @@
-const data = require('./fees.config.json');
+import { fees } from './fees.config.json';
 
-export default function computeCharge(amount) {
-  let output = '';
-  data.fees.find(({ minAmount, maxAmount, feeAmount }) => {
-    if(amount >= minAmount && amount <= maxAmount) {
-      return output = feeAmount;
-    }
-  });
-  return output;
+function computeCharge(amount) {
+	let output = '';
+	const chargeRange = fees.find(({ minAmount, maxAmount, feeAmount }) => {
+		if (amount >= minAmount && amount <= maxAmount) {
+			output = feeAmount;
+			return output;
+		}
+	});
+
+	return chargeRange['feeAmount'];
 }
-// module.exports = computeCharge();
+
+document.querySelector('#btn').onclick = function getInput() {
+	let input = document.getElementById('amount').value;
+	let chargedFees = computeCharge(input);
+	document.getElementById('result').innerText = chargedFees;
+};
